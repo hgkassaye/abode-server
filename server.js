@@ -1,0 +1,15 @@
+const express = require('express');
+
+const hostname = 'localhost';
+const port = 4000;
+
+const app = express();
+
+app.use((req, res) => {
+    console.log(req.headers);
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'text/html');
+    res.end('<html><body><h1>This is an Express server</h1></body></html>')
+})
+
+app.listen(port, hostname);
