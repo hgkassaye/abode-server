@@ -1,15 +1,28 @@
 const express = require('express');
+const morgan = require('morgan');
 
+
+const BuyListingRoute = require('./routes/BuyListingRoute');
+const RentListingRoute = require('./routes/RentListingRoute');
 const hostname = 'localhost';
-const port = 4000;
+const port = 5000;
+
+const mongoose = require('mongoose');
+const url = 'mongodb://localhost:27017/abode';
+const connect = mongoose.connect(url, {
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+});
+
+connect.then(() => console.log('Connected correctly to server'), err => console.log(err));
 
 const app = express();
+app.use(morgan('dev'));
+app.use(express.json());
 
-app.use((req, res) => {
-    console.log(req.headers);
-    res.statusCode = 200;
-    res.setHeader('Content-Type', 'text/html');
-    res.end('<html><body><h1>This is an Express server</h1></body></html>')
-})
+app.use(RentListingRoute);
+app.use(BuyListingRoute);
 
 app.listen(port, hostname);
