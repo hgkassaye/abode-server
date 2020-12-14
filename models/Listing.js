@@ -2,18 +2,24 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const ListingSchema = new Schema({
-    address: {
+    name: {
         type: String,
-        required: true
+        // required: true
     }, 
     price: {
-        type: Number, 
-        requried: true, 
-    },
-    transactiontype: {
         type: String, 
-        required: true
-    }
+        // requried: true, 
+    },
+    type: {
+        type: String, 
+        // required: true
+    }, 
+    image: [{
+        type: String,
+    }]
+    // image: {
+    //     type: String
+    // }
 })
 
 
