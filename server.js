@@ -1,6 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
+const path = require('path');
 
 const BuyListingRoute = require('./routes/BuyListingRoute');
 const RentListingRoute = require('./routes/RentListingRoute');
@@ -25,6 +26,8 @@ connect.then(() => console.log('Connected correctly to server'), err => console.
 const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
+
+app.use('/public/images', express.static(path.join('public','images')))
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
