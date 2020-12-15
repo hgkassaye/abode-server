@@ -1,12 +1,13 @@
 const express = require('express');
 
+const authenticate = require('../authenticate');
 const  Listing = require('../models/Listing');
 const fileUpload = require('../middleware/file-upload');
 
 const AddListingRouter = express.Router();
 
 AddListingRouter.route('/list') 
-.post(fileUpload.array('image',4),(req, res, next) => {
+.post(authenticate.verifyUser, fileUpload.array('image',4),(req, res, next) => {
     console.log(req.files)
     const imageFiles = []
     console.log('my length is ', req.files.length)

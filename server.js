@@ -2,10 +2,13 @@ const express = require('express');
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const path = require('path');
+const passport = require('passport');
 
+const config = require('./config');
 const BuyListingRoute = require('./routes/BuyListingRoute');
 const RentListingRoute = require('./routes/RentListingRoute');
 const AddListingRoute = require('./routes/AddListingRoute');
+const usersRoute = require('./routes/UsersRoute');
 const AddListingRouter = require('./routes/AddListingRoute');
 const TestingRouter = require('./routes/TestingRoute');
 
@@ -26,8 +29,12 @@ connect.then(() => console.log('Connected correctly to server'), err => console.
 const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false}))
+
+app.use(passport.initialize());
 
 app.use('/public/images', express.static(path.join('public','images')))
+
 
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -36,9 +43,11 @@ app.use((req, res, next) => {
     next();
 })
 
+
+app.use('/user', usersRoute)
 app.use(RentListingRoute);
 app.use(BuyListingRoute);
-app.use(AddListingRouter);
+app.use(AddListingRoute);
 app.use(TestingRouter);
 
 app.listen(port, hostname);
