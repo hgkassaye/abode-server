@@ -49,6 +49,8 @@ userRouter.route('/signup')
     )
 })
 
+
+
 // userRouter.route('/login')
 // .post(passport.authenticate('local'), (req, res) => {
 //     const token = authenticate.getToken({_id: req.user._id});
@@ -63,6 +65,20 @@ userRouter.post('/login', passport.authenticate('local'), (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     res.json({success: true, token: token, status: "You are successfully logged in!"});
   })
+
+userRouter.route('/logout')
+.post((req,res,next) => {
+    if (req.session) {
+        req.session.destroy();
+        res.clearCookie('session-id');
+        res.json({success: true, status: 'Successfully logged Out'})
+        res.redirect('/');
+    } else {
+        const err = new Error('You are not logged in')
+        err.status = 401;
+        return next(err);
+    }
+})
 
 // userRouter.route('/signup')
 // .post((req, res, next) => {

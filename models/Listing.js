@@ -16,10 +16,11 @@ const ListingSchema = new Schema({
     }, 
     image: [{
         type: String,
-    }]
-    // image: {
-    //     type: String
-    // }
+    }],
+    location: {
+        lat: { type: Number, required: false},
+        lng: { type: Number, required: false}
+    }
 })
 
 

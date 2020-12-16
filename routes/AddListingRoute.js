@@ -3,11 +3,12 @@ const express = require('express');
 const authenticate = require('../authenticate');
 const  Listing = require('../models/Listing');
 const fileUpload = require('../middleware/file-upload');
+const getCoordinates = require('../util/googleLocation');
 
 const AddListingRouter = express.Router();
 
 AddListingRouter.route('/list') 
-.post(authenticate.verifyUser, fileUpload.array('image',4),(req, res, next) => {
+.post(authenticate.verifyUser, fileUpload.array('image',4),async(req, res, next) => {
     console.log(req.files)
     const imageFiles = []
     console.log('my length is ', req.files.length)
@@ -16,17 +17,22 @@ AddListingRouter.route('/list')
     }
     console.log('my image file is', imageFiles)
     const { name, price, type} = req.body;
+    
+    let coordinates;
+    try {
+        coordinates = await getCoordinates(name)
+    } catch(error) {
+        return next(error);
+    }
+
     const newListing = new Listing({
         name,
         price,
         type,
-        // image: req.file.path
-        image: imageFiles
+        image: imageFiles,
+        location: coordinates
     })
-    console.log('here is my body')
-    console.log(req.body)
-    console.log('here if my file')
-    console.log(req.file)
+    
     // Listing.create(req.body)
     newListing.save()
     .then(listing => {
